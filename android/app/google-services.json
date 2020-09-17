@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "695543934510",
+    "firebase_url": "https://hey-fellas-6b3b1.firebaseio.com",
+    "project_id": "hey-fellas-6b3b1",
+    "storage_bucket": "hey-fellas-6b3b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695543934510:android:cdd7c245b1d378fb5239bf",
+        "android_client_info": {
+          "package_name": "com.supersonic.hey_fellas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695543934510-st92qt9fm2cdjl0eci74gtthgf9tb2sk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.supersonic.hey_fellas",
+            "certificate_hash": "5cb7a4f8a0419aee1d8a7823c31f45c91dacb25b"
+          }
+        },
+        {
+          "client_id": "695543934510-em6pk6s29atfsns89k7nm5ale50esco5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4lzbbi_aNKYBfJ_Ae4EjU6fOCieMosUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695543934510-em6pk6s29atfsns89k7nm5ale50esco5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
