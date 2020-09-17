@@ -6,10 +6,10 @@ import 'package:hey_fellas/helper/constants.dart';
 import 'package:hey_fellas/services/database.dart';
 
 class ChatScreen extends StatefulWidget {
-  // final User user;
   final String chatRoomId;
+  final String chattingWith;
 
-  ChatScreen({this.chatRoomId});
+  ChatScreen({this.chatRoomId, this.chattingWith});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -53,26 +53,28 @@ class _ChatScreenState extends State<ChatScreen> {
     final Container msg = Container(
       margin: isMe
           ? EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
+              top: 4.0,
+              bottom: 4.0,
               left: 80.0,
             )
           : EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
+              top: 4.0,
+              bottom: 4.0,
             ),
-      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
-        color: isMe ? Theme.of(context).accentColor : Color(0xFFFFEFEE),
+        color: isMe ? Color(0xFFffd166) : Color(0xFFadf6b1),
         borderRadius: isMe
             ? BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                bottomLeft: Radius.circular(15.0),
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+                bottomLeft: Radius.circular(25.0),
               )
             : BorderRadius.only(
-                topRight: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0),
+                topRight: Radius.circular(25.0),
+                topLeft: Radius.circular(25.0),
+                bottomRight: Radius.circular(25.0),
               ),
       ),
       child: Column(
@@ -87,14 +89,14 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           SizedBox(
-            height: 5.0,
+            height: 3.0,
           ),
           Text(
             message,
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
-              color: Colors.blueGrey,
+              color: Colors.black,
             ),
           ),
         ],
@@ -133,8 +135,12 @@ class _ChatScreenState extends State<ChatScreen> {
   _buildMessageComposer() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 70.0,
-      color: Colors.white,
+      margin: EdgeInsets.all(8.0),
+      height: 60.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.grey[300],
+      ),
       child: Row(
         children: [
           IconButton(
@@ -175,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            widget.chatRoomId, //TODO
+            widget.chattingWith, //TODO
             style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
@@ -201,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFF6c757d), //bgcolor
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
@@ -218,7 +224,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       return snapshot.hasData
                           ? ListView.builder(
                               // reverse: true,
-                              padding: EdgeInsets.only(top: 15.0),
+                              padding: EdgeInsets.only(top: 5.0),
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return _buildMessage(

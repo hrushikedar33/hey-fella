@@ -76,6 +76,10 @@ class _SearchScreenState extends State<SearchScreen> {
           builder: (context) {
             return ChatScreen(
               chatRoomId: chatRoomId,
+              chattingWith: chatRoomId
+                  .toString()
+                  .replaceAll("_", "")
+                  .replaceAll(Constants.myName, ""),
             );
           },
         ),
@@ -96,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(
                   fontFamily: 'Docker',
                   fontSize: 16.0,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
               Text(
@@ -104,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(
                   fontFamily: 'Docker',
                   fontSize: 16.0,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
             ],

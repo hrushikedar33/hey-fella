@@ -33,7 +33,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                   fontFamily: 'Docker',
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold,
-                  color: index == selectedIndex ? Colors.white : Colors.white60,
+                  color: index == selectedIndex ? Colors.white : Colors.white54,
                   letterSpacing: 1.2,
                 ),
               ),

@@ -105,27 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   //FavouriteContacts(),
-                  StreamBuilder(
-                    stream: chatRooms,
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? ListView.builder(
-                              itemCount: snapshot.data.documents.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return RecentChats(
-                                  userName: snapshot
-                                      .data.documents[index].data['chatroomid']
-                                      .toString()
-                                      .replaceAll("_", "")
-                                      .replaceAll(Constants.myName, ""),
-                                  chatRoomId: snapshot
-                                      .data.documents[index].data["chatroomid"],
-                                );
-                              },
-                            )
-                          : Container();
-                    },
+                  RecentChats(
+                    chatRooms: chatRooms,
                   ),
                 ],
               ),
