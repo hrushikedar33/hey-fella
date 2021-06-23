@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hey_fellas/helper/constants.dart';
 import 'package:hey_fellas/helper/helperFunction.dart';
-import 'package:hey_fellas/services/auth.dart';
 import 'package:hey_fellas/services/database.dart';
-import 'package:hey_fellas/ui/screens/auth/authantication.dart';
 import 'package:hey_fellas/ui/screens/home/search_screen.dart';
 import 'package:hey_fellas/ui/screens/widgets/category_selector.dart';
+import 'package:hey_fellas/common/constants/size_constants.dart';
+import 'package:hey_fellas/common/extensions/size_extension.dart';
+import 'package:hey_fellas/ui/screens/widgets/navdrawer.dart';
 import 'package:hey_fellas/ui/screens/widgets/recent_chats.dart';
+import 'package:hey_fellas/ui/theme/themecolor.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthServices _auth = AuthServices();
+  // final AuthServices _auth = AuthServices();
   DatabaseMethods _databaseMethods = new DatabaseMethods();
 
   Stream<QuerySnapshot> chatRooms;
@@ -40,42 +42,47 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      drawer: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: AppColor.black,
+          ),
+          child: Container(width: Sizes.dimen_250.w, child: NavDrawer())),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          iconSize: 30.0,
-          color: Colors.white,
-          onPressed: () async {
-            await _auth.signOut();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return Authantication();
-                },
-              ),
-            );
-          },
-        ),
+        // leading: IconButton(.
+        //   icon: Icon(Icons.menu),
+        //   iconSize: Sizes.dimen_28.w,
+        //   color: Colors.white, //todo
+        //   onPressed: () async {
+        //     await _auth.signOut();
+        //     Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) {
+        //           return Authantication();
+        //         },
+        //       ),
+        //     );
+        //   },
+        // ),
+        iconTheme: (IconThemeData(
+          color: Colors.red, //todo change color
+        )),
         title: Center(
           //change required
           child: Text(
             'hey fellas!',
-            style: TextStyle(
-              color: Color(0xFFfca311),
-              fontFamily: 'Docker',
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
+            style: Theme.of(context)
+                .textTheme
+                .headline5
+                .apply(color: Theme.of(context).unselectedWidgetColor),
           ),
         ),
         elevation: 0.0,
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            iconSize: 30.0,
+            iconSize: Sizes.dimen_28.w,
             color: Colors.white,
             onPressed: () {
               Navigator.push(
@@ -104,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Column(
                 children: [
-                  //FavouriteContacts(),
+                  // FavouriteContacts(),
                   RecentChats(
                     chatRooms: chatRooms,
                   ),

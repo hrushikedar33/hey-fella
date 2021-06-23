@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hey_fellas/helper/constants.dart';
 import 'package:hey_fellas/ui/screens/chats/chat_screen.dart';
+import 'package:hey_fellas/common/constants/size_constants.dart';
+import 'package:hey_fellas/common/extensions/size_extension.dart';
+import 'package:hey_fellas/ui/theme/themecolor.dart';
 
 class RecentChats extends StatefulWidget {
   final Stream<QuerySnapshot> chatRooms;
@@ -17,7 +20,7 @@ class _RecentChatsState extends State<RecentChats> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).unselectedWidgetColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
@@ -33,7 +36,7 @@ class _RecentChatsState extends State<RecentChats> {
             builder: (context, snapshot) {
               return snapshot.hasData
                   ? ListView.builder(
-                      itemCount: snapshot.data.documents.length,
+                      itemCount: snapshot.data.docs.length,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
@@ -43,10 +46,10 @@ class _RecentChatsState extends State<RecentChats> {
                               MaterialPageRoute(
                                 builder: (context) {
                                   return ChatScreen(
-                                    chatRoomId: snapshot.data.documents[index]
-                                        .data["chatroomid"],
-                                    chattingWith: snapshot.data.documents[index]
-                                        .data['chatroomid']
+                                    chatRoomId: snapshot.data.docs[index]
+                                        .data()["chatroomid"],
+                                    chattingWith: snapshot.data.docs[index]
+                                        .data()['chatroomid']
                                         .toString()
                                         .replaceAll("_", "")
                                         .replaceAll(Constants.myName, ""),
@@ -57,16 +60,22 @@ class _RecentChatsState extends State<RecentChats> {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0), //TODO
+                                horizontal: Sizes.dimen_20.w,
+                                vertical: Sizes.dimen_4.h),
                             margin: EdgeInsets.only(
-                                top: 5.0, bottom: 5.0, right: 10.0),
+                                top: Sizes.dimen_1.h,
+                                bottom: Sizes.dimen_1.h,
+                                right: Sizes.dimen_6.w,
+                                left: Sizes.dimen_6.w),
                             decoration: BoxDecoration(
                               // color: chat.unread ? Color(0xFFFFEFEE) : Colors.white,
-                              color: Color(0xFFadb5bd),
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(20.0),
-                                bottomRight: Radius.circular(20.0),
-                              ),
+
+                              color: Colors.lightBlueAccent, //todo
+                              // borderRadius: BorderRadius.only(
+                              //   topRight: Radius.circular(20.0),
+                              //   bottomRight: Radius.circular(20.0),
+                              // ),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,30 +83,29 @@ class _RecentChatsState extends State<RecentChats> {
                                 Row(
                                   children: [
                                     CircleAvatar(
-                                      radius: 35.0,
+                                      radius: 25.0,
                                       // backgroundImage: AssetImage(chat.sender.imageUrl),
                                     ),
-                                    SizedBox(
-                                      width: 10.0,
-                                    ),
+                                    SizedBox(width: Sizes.dimen_12.w),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          snapshot.data.documents[index]
-                                              .data['chatroomid']
+                                          snapshot.data.docs[index]
+                                              .data()['chatroomid']
                                               .toString()
                                               .replaceAll("_", "")
                                               .replaceAll(Constants.myName, ""),
-                                          style: TextStyle(
-                                            color: Colors.grey, //color chang
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .apply(
+                                                  color: Colors.white,
+                                                  fontWeightDelta: 2),
                                         ),
                                         SizedBox(
-                                          height: 5.0,
+                                          height: Sizes.dimen_2.h,
                                         ),
                                         Container(
                                           width: MediaQuery.of(context)
@@ -107,12 +115,10 @@ class _RecentChatsState extends State<RecentChats> {
                                           child: Text(
                                             // chat.text,
                                             "message",
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.blueGrey, //color chang
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .apply(color: AppColor.black),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
@@ -125,19 +131,20 @@ class _RecentChatsState extends State<RecentChats> {
                                     Text(
                                       // chat.time,
                                       "3.0",
-                                      style: TextStyle(
-                                        color: Colors.grey, //color chang
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .apply(
+                                              color: AppColor.black,
+                                              fontWeightDelta: 2),
                                     ),
                                     SizedBox(
-                                      height: 5.0,
+                                      height: Sizes.dimen_2.h,
                                     ),
                                     // chat.unread
                                     Container(
-                                      width: 40.0,
-                                      height: 20.0,
+                                      width: Sizes.dimen_40.w,
+                                      height: Sizes.dimen_8.h,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context).primaryColor,
                                         borderRadius:
@@ -148,7 +155,7 @@ class _RecentChatsState extends State<RecentChats> {
                                         'new',
                                         style: TextStyle(
                                           color: Colors.white, //color chang
-                                          fontSize: 12.0,
+                                          fontSize: Sizes.dimen_12.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

@@ -9,6 +9,9 @@ import 'package:hey_fellas/ui/screens/auth/common/authbackground.dart';
 import 'package:hey_fellas/ui/screens/auth/common/sample_logo.dart';
 import 'package:hey_fellas/ui/screens/auth/forget_pass.dart';
 import 'package:hey_fellas/ui/screens/home/home_screen.dart';
+import 'package:hey_fellas/ui/widgets/loader.dart';
+import 'package:hey_fellas/common/constants/size_constants.dart';
+import 'package:hey_fellas/common/extensions/size_extension.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function toggleView;
@@ -36,6 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   QuerySnapshot snapshotUserInfo;
 
+  void dispose() {
+    _emaileditingcontroller.dispose();
+    _passwordeditingcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: missing_required_param
@@ -46,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: isLoading
             ? Center(
                 child: Container(
-                  child: CircularProgressIndicator(),
+                  child: Loader(),
                 ),
               )
             : SingleChildScrollView(
@@ -56,30 +65,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: 80, left: 16),
-                        child: SamoleLogo(),
+                        padding: EdgeInsets.only(
+                            top: Sizes.dimen_36.h, left: Sizes.dimen_16.w),
+                        child: SamoleLogo(), //todo Logo
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 28),
+                        padding: EdgeInsets.only(
+                            left: Sizes.dimen_16.w,
+                            right: Sizes.dimen_16.w,
+                            top: Sizes.dimen_12.h),
                         child: Text(
                           "Welcome back!",
-                          style: Theme.of(context).textTheme.headline1,
+                          style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                        padding: EdgeInsets.only(
+                            left: Sizes.dimen_16.w,
+                            right: Sizes.dimen_16.w,
+                            top: Sizes.dimen_4.h),
                         child: Text(
                           "Enter your email address and password to get access your account.",
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 40),
+                        padding: EdgeInsets.only(
+                            left: Sizes.dimen_16.w,
+                            right: Sizes.dimen_16.w,
+                            top: Sizes.dimen_20.h),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            color:
-                                Color(0xFF262630), //BorderRadius.circular(10),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: Color(
+                                0xFF262630), //todo change color //BorderRadius.circular(10),
                           ),
                           child: Column(
                             children: <Widget>[
@@ -104,27 +123,36 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 40),
-                            child: loginButton(),
+                            padding: EdgeInsets.only(top: Sizes.dimen_18.h),
+                            child:
+                                loginButton(), //todo:same as login with button
                           ),
                         ],
                       ),
                       loginViaGoogleButton(),
                       Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 50),
+                        padding: EdgeInsets.only(
+                            left: Sizes.dimen_16.w,
+                            right: Sizes.dimen_16.w,
+                            top: Sizes.dimen_24.h),
                         child: Text(
                           'Don\'t have an account?',
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
                       FlatButton(
+                        highlightColor:
+                            Colors.red, //todo:change to splash color
                         onPressed: () {
                           //navigatorToSignupScreen();
                           widget.toggleView();
                         },
                         child: Text(
                           "Create account",
-                          style: Theme.of(context).textTheme.headline3,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .apply(color: Colors.white),
                         ),
                       ),
                     ],
@@ -137,7 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget emailTextField() {
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
+      padding: EdgeInsets.only(
+          left: Sizes.dimen_16.w, right: Sizes.dimen_16.w, bottom: 0),
       child: TextFormField(
         validator: (val) {
           if (val.isEmpty) {
@@ -158,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
         controller: _emaileditingcontroller,
         textInputAction: TextInputAction.next,
         cursorColor: Colors.white24,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyText2.apply(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Email',
           border: InputBorder.none,
@@ -177,16 +206,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget formDivider() {
     return Padding(
-      padding: EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: Sizes.dimen_16.w, right: Sizes.dimen_16.w),
       child: Divider(
-        color: Color(0xFF2c2f37),
+        color: Colors.white54,
       ),
     );
   }
 
   Widget passwordTextField() {
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
+      padding: EdgeInsets.only(
+          left: Sizes.dimen_16.w,
+          right: Sizes.dimen_16.w,
+          top: 0,
+          bottom: Sizes.dimen_2.h),
       child: TextFormField(
         validator: (val) {
           if (val.isEmpty) {
@@ -204,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
         controller: _passwordeditingcontroller,
         obscureText: _obsecurePassword,
         cursorColor: Colors.white24,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyText2.apply(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Password',
           border: InputBorder.none,
@@ -229,7 +262,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.white,
                   ),
           ),
-          suffixIconConstraints: BoxConstraints.tight(Size(56, 24)),
+          suffixIconConstraints:
+              BoxConstraints.tight(Size(Sizes.dimen_48.w, Sizes.dimen_12.h)),
         ),
       ),
     );
@@ -237,14 +271,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget loginButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           'Login',
           style: Theme.of(context).textTheme.headline2,
         ),
         Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(Sizes.dimen_16.w),
           child: FloatingActionButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
@@ -253,18 +288,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 });
 
                 await _auth
-                    .signIn(_emaileditingcontroller.text,
-                        _passwordeditingcontroller.text)
+                    .signIn(_emaileditingcontroller.text.trim(),
+                        _passwordeditingcontroller.text.trim())
                     .then((result) async {
                   if (result != null) {
                     snapshotUserInfo = await _databaseMethods
-                        .getUserInfo(_emaileditingcontroller.text);
+                        .getUserInfo(_emaileditingcontroller.text.trim());
 
                     HelperFunctions.saveUserEmailSharedPreference(
-                        snapshotUserInfo.documents[0].data["email"]);
+                        snapshotUserInfo.docs[0].data()["email"]);
 
                     HelperFunctions.saveUserNameSharedPreference(
-                        snapshotUserInfo.documents[0].data['name']);
+                        snapshotUserInfo.docs[0].data()['name']);
 
                     HelperFunctions.saveUserLoggedInSharedPreference(true);
 
@@ -292,10 +327,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget loginViaGoogleButton() {
     return Padding(
-      padding: EdgeInsets.only(left: 16, top: 35, right: 16),
+      padding: EdgeInsets.only(
+          left: Sizes.dimen_80.w,
+          top: Sizes.dimen_14.h,
+          right: Sizes.dimen_80.w),
       child: InkWell(
         onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
           await _auth.signInWithGoogle();
+
+          // String _gEmail = _googleSignIn.currentUser.email;
+          // String _gDisplayName = _googleSignIn.currentUser.displayName;
+          // // String _gPhoto = _googleSignIn.currentUser.photoUrl;
+          // // String _gId = _googleSignIn.currentUser.id;
+
+          // HelperFunctions.saveUserEmailSharedPreference(_gEmail);
+          // HelperFunctions.saveUserNameSharedPreference(_gDisplayName);
+          // HelperFunctions.saveUserLoggedInSharedPreference(true);
+
           Navigator.pushReplacement(context, MaterialPageRoute(
             builder: (context) {
               return HomeScreen();
@@ -309,29 +360,33 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: IntrinsicHeight(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_14.w),
                   child: SvgPicture.asset(
                     'assets/images/GoogleLogo.svg',
                     // color: Colors.white,
-                    width: 24,
-                    height: 24,
+                    width: Sizes.dimen_20.w,
+                    height: Sizes.dimen_10.h,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: Sizes.dimen_6.h),
                   child: VerticalDivider(
                     thickness: 1,
                     color: Colors.white,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Sizes.dimen_16.w, vertical: Sizes.dimen_6.h),
                   child: Text(
                     'Login with Google',
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1
+                        .apply(color: Colors.white),
                   ),
                 ),
               ],

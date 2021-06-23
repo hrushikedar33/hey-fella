@@ -1,11 +1,13 @@
-class User {
-  final int id;
-  final String name;
-  final String imageUrl;
+class UserModel {
+  final String uid;
+  final String email;
+  final String displayName;
+  final String photoUrl;
 
-  User({
-    this.id,
-    this.name,
-    this.imageUrl,
+  UserModel({
+    this.uid,
+    this.email,
+    this.displayName,
+    this.photoUrl,
   });
 }

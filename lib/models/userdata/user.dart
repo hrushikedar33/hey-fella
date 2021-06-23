@@ -1,5 +1,5 @@
-class User {
-  final String uid;
-
-  User({this.uid});
-}
+// class UserModel {
+//   final String uid;
+//   final String email;
+//   UserModel({this.email, this.uid});
+// }

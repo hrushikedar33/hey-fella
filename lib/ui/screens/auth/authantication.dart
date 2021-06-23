@@ -16,6 +16,8 @@ class _AuthanticationState extends State<Authantication> {
 
   @override
   Widget build(BuildContext context) {
+    // final user = Provider.of<UserModel>(context);
+
     if (showSignIn) {
       return LoginScreen(toggleView: toggleView);
     } else {

@@ -10,6 +10,12 @@ class _CategorySelectorState extends State<CategorySelector> {
 
   final List<String> categories = ['Message', 'Online', 'Groups', 'Requests'];
 
+  changePage(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hey_fellas/helper/constants.dart';
 import 'package:hey_fellas/services/database.dart';
 import 'package:hey_fellas/ui/screens/chats/chat_screen.dart';
+import 'package:hey_fellas/common/constants/size_constants.dart';
+import 'package:hey_fellas/common/extensions/size_extension.dart';
+import 'package:hey_fellas/ui/theme/themecolor.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -16,9 +19,11 @@ class _SearchScreenState extends State<SearchScreen> {
       new TextEditingController();
 
   QuerySnapshot searchSnapshot;
+  QuerySnapshot allUserSnapshot;
 
   bool isLoading = false;
   bool haveUserSearched = false;
+  bool allUserSearched = false;
 
   @override
   void initState() {
@@ -43,15 +48,40 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  userList() async {
+    await _databaseMethods.getAllWithUsername().forEach((snapshot) {
+      allUserSnapshot = snapshot;
+      print("$allUserSnapshot");
+      setState(() {
+        isLoading = false;
+        allUserSearched = true;
+      });
+    });
+  }
+
   Widget searchList() {
     return haveUserSearched
         ? ListView.builder(
-            itemCount: searchSnapshot.documents.length,
+            itemCount: searchSnapshot.docs.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return searchTile(
-                searchSnapshot.documents[index].data['name'],
-                searchSnapshot.documents[index].data['email'],
+                searchSnapshot.docs[index].data()['name'],
+                searchSnapshot.docs[index].data()['email'],
+              );
+            })
+        : Container();
+  }
+
+  Widget allUserList() {
+    return allUserSearched
+        ? ListView.builder(
+            itemCount: allUserSnapshot.docs.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return searchTile(
+                allUserSnapshot.docs[index].data()['name'],
+                allUserSnapshot.docs[index].data()['email'],
               );
             })
         : Container();
@@ -89,7 +119,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget searchTile(String userName, String userEmail) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: Sizes.dimen_10.w, vertical: Sizes.dimen_4.h),
       child: Row(
         children: [
           Column(
@@ -97,19 +128,14 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Text(
                 userName,
-                style: TextStyle(
-                  fontFamily: 'Docker',
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .apply(color: Colors.white),
               ),
               Text(
                 userEmail,
-                style: TextStyle(
-                  fontFamily: 'Docker',
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
           ),
@@ -119,18 +145,15 @@ class _SearchScreenState extends State<SearchScreen> {
               sendRequest(userName);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.dimen_10.w, vertical: Sizes.dimen_4.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 color: Colors.blue,
               ),
               child: Text(
                 'Request',
-                style: TextStyle(
-                  fontFamily: 'Docker',
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.button,
               ),
             ),
           ),
@@ -150,11 +173,11 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          iconSize: 30.0,
+          iconSize: Sizes.dimen_28.w,
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
@@ -164,24 +187,55 @@ class _SearchScreenState extends State<SearchScreen> {
           //change required
           child: Text(
             'hey fellas!',
-            style: TextStyle(
-              color: Color(0xFFfca311),
-              fontFamily: 'Docker',
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
+            style: Theme.of(context).textTheme.headline5,
           ),
         ),
         elevation: 0.0,
         actions: [
-          IconButton(
+          PopupMenuButton(
             icon: Icon(Icons.more_horiz),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () {
-              print('Menu button pressed');
+            color: AppColor.black,
+            onSelected: (value) {
+              print(value);
+              // Note You must create respective pages for navigation
+              // Navigator.pushNamed(context, value);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => value,
+                  ));
             },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                child: Text(
+                  "Clear Searches",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .apply(color: AppColor.white),
+                ),
+                value: SearchScreen(),
+              ),
+
+              PopupMenuItem(
+                  child: Text(
+                    "Report",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .apply(color: AppColor.white),
+                  ),
+                  value: ""), //todo
+              PopupMenuItem(
+                  child: Text(
+                    "Settings",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .apply(color: AppColor.white),
+                  ),
+                  value: ""), //todo
+            ],
           ),
         ],
       ),
@@ -194,7 +248,7 @@ class _SearchScreenState extends State<SearchScreen> {
           : GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
               child: Container(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(Sizes.dimen_8.w),
                 decoration: BoxDecoration(
                   color: Theme.of(context).accentColor,
                   borderRadius: BorderRadius.only(
@@ -206,7 +260,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
+                          horizontal: Sizes.dimen_24.w,
+                          vertical: Sizes.dimen_2.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30.0),
                         color: Colors.grey[300],
@@ -225,8 +280,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           Container(
-                            height: 35,
-                            width: 35,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -234,11 +287,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Colors.green,
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(30.0),
+                              shape: BoxShape.circle,
                             ),
                             child: IconButton(
                               icon: Icon(Icons.search),
-                              iconSize: 20.0,
+                              iconSize: Sizes.dimen_24.w,
                               color: Colors.white,
                               onPressed: () {
                                 initiateSearch();
@@ -250,9 +303,24 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
+                          horizontal: Sizes.dimen_20.w,
+                          vertical: Sizes.dimen_4.h),
                       child: searchList(),
-                    )
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Sizes.dimen_10.w,
+                                  vertical: Sizes.dimen_4.h),
+                              child: allUserList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

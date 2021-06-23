@@ -2,18 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
   getUserWithUsername(String username) async {
-    return await Firestore.instance
+    return await FirebaseFirestore.instance
         .collection('users')
         .where("name", isEqualTo: username)
-        .getDocuments();
+        .get();
+  }
+
+  getAllWithUsername() async {
+    return await FirebaseFirestore.instance.collection('users').get();
   }
 
   getUserInfo(String userEmail) async {
     try {
-      return await Firestore.instance
+      return await FirebaseFirestore.instance
           .collection('users')
           .where("email", isEqualTo: userEmail)
-          .getDocuments();
+          .get();
     } catch (e) {
       print(e.toString());
       return null;
@@ -21,18 +25,18 @@ class DatabaseMethods {
   }
 
   searchByName(String searchField) {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('users')
         .where('name', isEqualTo: searchField)
-        .getDocuments();
+        .get();
   }
 
   makeRequestToUser(String chatRoomId, chatRoomMap) {
     try {
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection('requests')
-          .document(chatRoomId)
-          .setData(chatRoomMap);
+          .doc(chatRoomId)
+          .set(chatRoomMap);
     } catch (e) {
       print(e.toString());
       return null;
@@ -41,7 +45,7 @@ class DatabaseMethods {
 
   uploadUserInfo(userMap) {
     try {
-      Firestore.instance.collection('users').add(userMap);
+      FirebaseFirestore.instance.collection('users').add(userMap);
     } catch (e) {
       print(e.toString());
       return null;
@@ -50,9 +54,9 @@ class DatabaseMethods {
 
   addConversationMessages(String chatRoomId, messageMap) {
     try {
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection("requests")
-          .document(chatRoomId)
+          .doc(chatRoomId)
           .collection("chats")
           .add(messageMap);
     } catch (e) {
@@ -62,16 +66,16 @@ class DatabaseMethods {
   }
 
   getConversationMessages(String chatRoomId) async {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection("requests")
-        .document(chatRoomId)
+        .doc(chatRoomId)
         .collection("chats")
         .orderBy("time")
         .snapshots();
   }
 
   getChatRooms(String userName) async {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection("requests")
         .where("users", arrayContains: userName)
         .snapshots();
